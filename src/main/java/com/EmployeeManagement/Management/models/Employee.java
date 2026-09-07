@@ -1,0 +1,36 @@
+package com.EmployeeManagement.Management.models;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Employee {
+
+        @Id
+        @NotNull
+        private Long id;
+        @NotBlank
+        private String firstName;
+        private String middleName;
+        @NotBlank
+        private String lastName;
+        @NotBlank
+        private String email;
+        @NotBlank
+        private String phone;
+        @NotNull
+        private Double salary;
+        @NotBlank
+        private String department;
+        @NotBlank
+        private String designation;
+}
