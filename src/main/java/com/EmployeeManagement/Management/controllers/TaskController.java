@@ -49,7 +49,7 @@ public class TaskController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<Task> updateTaskStatus(
             @PathVariable Long id,
-            @RequestBody TaskStatus status) {
+            @RequestParam TaskStatus status) {
 
         Task task = services.updateTaskStatus(id, status);
 

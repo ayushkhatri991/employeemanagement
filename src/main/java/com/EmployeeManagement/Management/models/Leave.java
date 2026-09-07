@@ -1,5 +1,6 @@
 package com.EmployeeManagement.Management.models;
 
+import com.EmployeeManagement.Management.enums.LeaveStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,8 +29,10 @@ public class Leave {
     private LocalDate endDate;
     @NotBlank
     private String reason;
-    @NotBlank
-    private String status;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private LeaveStatus status;
 
 
 

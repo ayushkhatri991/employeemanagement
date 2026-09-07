@@ -2,6 +2,7 @@ package com.EmployeeManagement.Management.models;
 
 import com.EmployeeManagement.Management.enums.TaskStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,13 @@ import java.time.LocalDate;
 @Entity
 public class Task {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    private String title;
+
+    private String description;
 
     @ManyToOne
     @NotNull
