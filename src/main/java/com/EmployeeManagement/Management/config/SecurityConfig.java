@@ -24,6 +24,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -107,7 +108,7 @@ public class SecurityConfig {
     public JwtDecoder jwtDecoder() {
 
         SecretKey key = new SecretKeySpec(
-                SECRET_KEY.getBytes(StandardCharsets.UTF_8),
+                secretKey.getBytes(StandardCharsets.UTF_8),
                 "HmacSHA256"
         );
 
@@ -121,7 +122,7 @@ public class SecurityConfig {
     public JwtEncoder jwtEncoder() {
 
         SecretKey key = new SecretKeySpec(
-                SECRET_KEY.getBytes(StandardCharsets.UTF_8),
+                secretKey.getBytes(StandardCharsets.UTF_8),
                 "HmacSHA256"
         );
 
