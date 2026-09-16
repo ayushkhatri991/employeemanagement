@@ -1,5 +1,6 @@
 package com.EmployeeManagement.Management.controllers;
 
+import com.EmployeeManagement.Management.enums.LeaveStatus;
 import com.EmployeeManagement.Management.models.Leave;
 import com.EmployeeManagement.Management.services.LeaveServices;
 import jakarta.validation.Valid;
@@ -21,7 +22,10 @@ public class LeaveController {
     public ResponseEntity<List<Leave>> getAllLeaves() {
         return ResponseEntity.ok(services.getAllLeaves());
     }
-
+    @GetMapping("/leaves/pending")
+    public ResponseEntity<List<Leave>> getPendingLeaves() {
+        return ResponseEntity.ok(services.getPendingLeaves());
+    }
     @GetMapping("/leaves/{id}")
     public ResponseEntity<Leave> getLeave(@PathVariable long id) {
 
@@ -42,12 +46,13 @@ public class LeaveController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedLeave);
     }
 
-    @PutMapping("/leaves/{id}")
+    //can do only by admin
+    @PutMapping("/leaves/{id}/status")
     public ResponseEntity<Leave> updateLeave(
             @PathVariable long id,
-           @Valid @RequestBody Leave leave) {
+            @RequestParam LeaveStatus status) {
 
-        Leave updatedLeave = services.updateLeave(id, leave);
+        Leave updatedLeave = services.updateLeave(id, status);
 
         if (updatedLeave == null) {
             return ResponseEntity.notFound().build();

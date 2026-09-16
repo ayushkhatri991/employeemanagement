@@ -1,7 +1,9 @@
 package com.EmployeeManagement.Management.services;
 
+import com.EmployeeManagement.Management.enums.LeaveStatus;
 import com.EmployeeManagement.Management.models.Leave;
 import com.EmployeeManagement.Management.repo.LeaveRepo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +28,26 @@ public class LeaveServices {
         return repo.save(leave);
     }
 
-    public Leave updateLeave(long id, Leave leave) {
 
-        if (!repo.existsById(id)) {
-            return null;
-        }
-
-        leave.setId(id);
-        return repo.save(leave);
-    }
 
     public void deleteLeave(long id) {
         repo.deleteById(id);
+    }
+
+    public Leave updateLeave(long id,  LeaveStatus status) {
+
+        Leave leave = repo.findById(id).orElse(null);
+
+        if (leave == null) {
+            return null;
+        }
+
+        leave.setStatus(status);
+
+        return repo.save(leave);
+    }
+
+    public List<Leave> getPendingLeaves() {
+        return repo.findByStatus(LeaveStatus.PENDING);
     }
 }

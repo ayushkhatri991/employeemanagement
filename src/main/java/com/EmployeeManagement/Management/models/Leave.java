@@ -32,7 +32,7 @@ public class Leave {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private LeaveStatus status;
+    private LeaveStatus status = LeaveStatus.PENDING;
 
 
 
