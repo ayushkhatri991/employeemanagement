@@ -26,6 +26,10 @@ public class User {
     @Column(nullable = false)
     private UserRole role;
 
+    @OneToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
 
 
 }

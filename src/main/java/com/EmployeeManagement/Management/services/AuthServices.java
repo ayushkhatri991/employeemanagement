@@ -9,7 +9,7 @@ import com.EmployeeManagement.Management.repo.UserRepo;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +20,20 @@ public class AuthServices {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtServices jwtService;
+    private final com.EmployeeManagement.Management.repo.EmployeeRepo employeeRepo;
 
     public AuthServices(
             UserRepo userRepo,
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
-            JwtServices jwtService) {
+            JwtServices jwtService,
+            com.EmployeeManagement.Management.repo.EmployeeRepo employeeRepo) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
+        this.employeeRepo = employeeRepo;
     }
-
     public User register( RegisterRequest request) {
     if (userRepo.existsByUsername(request.username())) {
         throw new RuntimeException("Username already exists");
@@ -40,6 +42,11 @@ public class AuthServices {
     user.setUsername(request.username());
     user.setPassword(passwordEncoder.encode(request.password()));
     user.setRole(UserRole.USER);
+    if (request.employeeId() != null) {
+        com.EmployeeManagement.Management.models.Employee emp = employeeRepo.findById(request.employeeId())
+            .orElseThrow(() -> new RuntimeException("Employee not found"));
+        user.setEmployee(emp);
+    }
     return userRepo.save(user);
     }
 
@@ -48,7 +55,7 @@ public class AuthServices {
                 new RuntimeException("Username not found"));
 
 
-        Authentication authentication = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.username(),
                         request.password())
         );

@@ -7,7 +7,9 @@ public record RegisterRequest(
         String username,
 
         @NotBlank
-        String password
+        String password,
+
+        Long employeeId
 ) {
 
 }

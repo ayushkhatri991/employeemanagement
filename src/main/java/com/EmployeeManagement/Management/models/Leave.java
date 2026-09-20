@@ -21,8 +21,9 @@ public class Leave {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String leaveType;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private com.EmployeeManagement.Management.enums.LeaveType leaveType;
     @NotNull
     private LocalDate startDate;
     @NotNull

@@ -29,6 +29,9 @@ public class PayrollServices {
     @Autowired
     private DeductionRepo deductionRepo;
 
+    @Autowired
+    private LeaveRepo leaveRepo;
+
 
     private static final double TAX_DEDUCTION_RATE = 0.10;
 
@@ -170,6 +173,21 @@ public class PayrollServices {
 
                 deductions +=
                         deduction.getAmount();
+            }
+        }
+
+        // 7.5 Get leave deductions (Assuming "UNPAID" leaves result in salary deduction)
+        List<Leave> leaves = leaveRepo.findByEmployeeIdAndStatusAndStartDateBetween(
+                employeeId,
+                com.EmployeeManagement.Management.enums.LeaveStatus.APPROVED,
+                startDate,
+                endDate.minusDays(1)
+        );
+
+        for (Leave leave : leaves) {
+            if (leave.getLeaveType() == com.EmployeeManagement.Management.enums.LeaveType.UNPAID) {
+                long days = java.time.temporal.ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate()) + 1;
+                deductions += (baseSalary / 30.0) * days;
             }
         }
 
