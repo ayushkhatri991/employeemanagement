@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class AttendanceController {
     public ResponseEntity<List<Attendance>> getAllAttendance(){
         return ResponseEntity.ok(services.getAllAttendance());
     }
+
     @GetMapping("/attendance/{id}")
     public ResponseEntity<Attendance> getAttendance(@PathVariable long id) {
 
@@ -32,6 +34,7 @@ public class AttendanceController {
 
         return ResponseEntity.ok(attendance);
     }
+
 
     @GetMapping("/attendance/rating/{employeeId}")
     public ResponseEntity<Double> getAttendanceRating(
@@ -46,6 +49,7 @@ public class AttendanceController {
         return ResponseEntity.ok(rating);
     }
 
+    @PreAuthorize("hasRole('ADMIN','USER')")
     @PostMapping("/attendance")
     public ResponseEntity<Attendance> postAttendance(@Valid @RequestBody Attendance attendance){
        Attendance attendance1 =  services.postAttendance(attendance);
@@ -53,6 +57,7 @@ public class AttendanceController {
        return ResponseEntity.status(HttpStatus.CREATED).body(attendance1);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/attendance/{id}")
     public ResponseEntity<Attendance> updateAttendance(
             @PathVariable long id,
@@ -67,6 +72,7 @@ public class AttendanceController {
         return ResponseEntity.ok(updated);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/attendance/{id}")
     public ResponseEntity<?> deleteAttendance(@PathVariable long id) {
 

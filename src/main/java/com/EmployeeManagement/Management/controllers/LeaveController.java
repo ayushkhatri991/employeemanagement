@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class LeaveController {
         return ResponseEntity.ok(leave);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/leaves")
     public ResponseEntity<Leave> postLeave(@Valid @RequestBody Leave leave) {
 
@@ -46,7 +48,7 @@ public class LeaveController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedLeave);
     }
 
-    //can do only by admin
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/leaves/{id}/status")
     public ResponseEntity<Leave> updateLeave(
             @PathVariable long id,
@@ -61,6 +63,7 @@ public class LeaveController {
         return ResponseEntity.ok(updatedLeave);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/leaves/{id}")
     public ResponseEntity<?> deleteLeave(@PathVariable long id) {
 

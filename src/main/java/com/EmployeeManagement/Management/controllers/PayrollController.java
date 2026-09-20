@@ -5,6 +5,7 @@ import com.EmployeeManagement.Management.services.PayrollServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class PayrollController {
     }
 
 
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/generate")
     public ResponseEntity<?> generatePayroll(
             @RequestParam long employeeId,
@@ -70,6 +72,7 @@ public class PayrollController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePayroll(
             @PathVariable long id) {

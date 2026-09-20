@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class EmployeeController {
             return ResponseEntity.ok(employee);
         }
 
+    @PreAuthorize("hasRole('ADMIN')")
         @PostMapping("/employees")
         public ResponseEntity<Employee> postEmployee(@Valid @RequestBody Employee employee){
             Employee employee1 = services.postEmployee(employee);
@@ -37,6 +39,7 @@ public class EmployeeController {
 
         }
 
+        @PreAuthorize("hasRole('ADMIN')")
         @PutMapping("/employees/{id}")
         public ResponseEntity<Employee> updateEmployee(@PathVariable long id , @Valid @RequestBody Employee employee){
            Employee updatedEmployee = services.updateEmployee(id,employee);
@@ -46,6 +49,7 @@ public class EmployeeController {
             return ResponseEntity.ok(updatedEmployee);
         }
 
+    @PreAuthorize("hasRole('ADMIN')")
         @DeleteMapping("/employees/{id}")
         public ResponseEntity<?> deleteEmployee(@PathVariable long id){
          Employee employee = services.getEmployeeById(id);

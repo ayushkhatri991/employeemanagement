@@ -29,7 +29,7 @@ public class AttendanceServices {
     public double calculateAttendanceRating(
             long employeeId,
             int month,
-            int year) {
+            int year){
 
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = startDate.plusMonths(1);

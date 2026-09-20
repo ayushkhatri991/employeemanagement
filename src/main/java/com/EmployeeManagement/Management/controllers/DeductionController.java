@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class DeductionController {
         return ResponseEntity.ok(deduction);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Deduction> postDeduction(
             @Valid @RequestBody Deduction deduction) {
@@ -48,7 +50,9 @@ public class DeductionController {
                 .body(saved);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
+
     public ResponseEntity<Deduction> updateDeduction(
             @PathVariable long id,
             @Valid @RequestBody Deduction deduction) {
@@ -63,6 +67,7 @@ public class DeductionController {
         return ResponseEntity.ok(updated);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteDeduction(
             @PathVariable long id) {

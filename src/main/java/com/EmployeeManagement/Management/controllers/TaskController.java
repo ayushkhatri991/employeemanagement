@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Task> postTask(
             @Valid @RequestBody Task task) {
@@ -46,6 +48,7 @@ public class TaskController {
                 .body(task1);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<Task> updateTaskStatus(
             @PathVariable Long id,
@@ -60,6 +63,7 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(
             @PathVariable long id) {

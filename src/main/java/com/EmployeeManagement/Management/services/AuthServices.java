@@ -32,7 +32,7 @@ public class AuthServices {
         this.jwtService = jwtService;
     }
 
-    public User register(@Valid RegisterRequest request) {
+    public User register( RegisterRequest request) {
     if (userRepo.existsByUsername(request.username())) {
         throw new RuntimeException("Username already exists");
     }
