@@ -39,7 +39,7 @@ public class LeaveController {
         return ResponseEntity.ok(leave);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping("/leaves")
     public ResponseEntity<Leave> postLeave(@Valid @RequestBody Leave leave) {
 

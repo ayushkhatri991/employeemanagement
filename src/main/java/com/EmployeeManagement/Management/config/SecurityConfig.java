@@ -1,5 +1,4 @@
 package com.EmployeeManagement.Management.config;
-
 import com.EmployeeManagement.Management.services.CustomUserDetailsServices;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +17,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -27,16 +26,15 @@ import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     private CustomUserDetailsServices customUserDetailsServices;
 
     @Value("${jwt.secret}")
     private String secretKey;
-
     public SecurityConfig(
             CustomUserDetailsServices userDetailsServices) {
-
-        this.customUserDetailsServices = userDetailsServices;
+            this.customUserDetailsServices = userDetailsServices;
     }
 
 
@@ -45,19 +43,20 @@ public class SecurityConfig {
             HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
                         )
                 )
-
                 .authorizeHttpRequests(auth -> auth
-
                         // Public endpoints
                         .requestMatchers(
                                 "/api/auth/register",
-                                "/api/auth/login"
+                                "/api/auth/login",
+                                "/",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
                         ).permitAll()
 
                         // ADMIN only
@@ -74,7 +73,6 @@ public class SecurityConfig {
                 )
 
                 .userDetailsService(customUserDetailsServices)
-
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(
@@ -89,7 +87,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
 
@@ -98,25 +95,20 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration)
             throws Exception {
-
         return configuration.getAuthenticationManager();
     }
 
 
     @Bean
     public JwtDecoder jwtDecoder() {
-
         SecretKey key = new SecretKeySpec(
                 secretKey.getBytes(StandardCharsets.UTF_8),
                 "HmacSHA256"
         );
-
         return NimbusJwtDecoder
                 .withSecretKey(key)
                 .build();
     }
-
-
     @Bean
     public JwtEncoder jwtEncoder() {
 
@@ -129,8 +121,6 @@ public class SecurityConfig {
                 new ImmutableSecret<>(key)
         );
     }
-
-
     @Bean
     public JwtAuthenticationConverter
     jwtAuthenticationConverter() {
@@ -156,7 +146,4 @@ public class SecurityConfig {
 
         return converter;
     }
-
-
-
 }

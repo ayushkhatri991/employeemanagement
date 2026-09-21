@@ -49,7 +49,7 @@ public class AttendanceController {
         return ResponseEntity.ok(rating);
     }
 
-    @PreAuthorize("hasRole('ADMIN','USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping("/attendance")
     public ResponseEntity<Attendance> postAttendance(@Valid @RequestBody Attendance attendance){
        Attendance attendance1 =  services.postAttendance(attendance);

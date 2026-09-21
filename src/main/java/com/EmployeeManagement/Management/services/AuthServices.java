@@ -41,7 +41,7 @@ public class AuthServices {
     User user = new User();
     user.setUsername(request.username());
     user.setPassword(passwordEncoder.encode(request.password()));
-    user.setRole(UserRole.USER);
+    user.setRole(request.role() != null ? request.role() : UserRole.USER);
     if (request.employeeId() != null) {
         com.EmployeeManagement.Management.models.Employee emp = employeeRepo.findById(request.employeeId())
             .orElseThrow(() -> new RuntimeException("Employee not found"));

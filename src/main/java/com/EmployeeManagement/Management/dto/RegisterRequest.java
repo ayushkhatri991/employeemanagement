@@ -1,5 +1,6 @@
 package com.EmployeeManagement.Management.dto;
 
+import com.EmployeeManagement.Management.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 
 public record RegisterRequest(
@@ -9,7 +10,10 @@ public record RegisterRequest(
         @NotBlank
         String password,
 
-        Long employeeId
+        Long employeeId,
+
+        UserRole role
 ) {
 
 }
+
