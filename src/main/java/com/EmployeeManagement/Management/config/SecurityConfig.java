@@ -44,42 +44,33 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS
-                        )
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login",
-                                "/",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**"
-                        ).permitAll()
-
-                        // ADMIN only
-                        .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
-
-                        // ADMIN + USER
-                        .requestMatchers("/api/employees/**")
-                        .hasAnyRole("ADMIN", "USER")
-
-                        // Everything else requires login
-                        .anyRequest()
-                        .authenticated()
-                )
-
-                .userDetailsService(customUserDetailsServices)
-                .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt ->
-                                jwt.jwtAuthenticationConverter(
-                                        jwtAuthenticationConverter()
-                                )
-                        )
+                        .anyRequest().permitAll()
                 );
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(
+//                                "/api/auth/register",
+//                                "/api/auth/login",
+//                                "/api",
+//                                "/api/",
+//                                "/swagger-ui/**",
+//                                "/swagger-ui.html",
+//                                "/v3/api-docs/**"
+//                        ).permitAll()
+//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+//                        .requestMatchers("/api/employees/**").hasAnyRole("ADMIN", "USER")
+//                        .anyRequest().authenticated()
+//                )
+//                .userDetailsService(customUserDetailsServices)
+//                .oauth2ResourceServer(oauth2 ->
+//                        oauth2.jwt(jwt ->
+//                                jwt.jwtAuthenticationConverter(
+//                                        jwtAuthenticationConverter()
+//                                )
+//                        )
+//                );
 
         return http.build();
     }

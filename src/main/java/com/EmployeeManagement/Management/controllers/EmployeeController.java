@@ -17,6 +17,11 @@ public class EmployeeController {
     @Autowired
     EmployeeServices services;
 
+    @GetMapping("/")
+    public String welcome() {
+        return "Welcome to Employee Management System";
+    }
+
         @GetMapping("/employees")
         public ResponseEntity<List<Employee>> getAllEmployee() {
             return ResponseEntity.ok(services.getEmployees());
