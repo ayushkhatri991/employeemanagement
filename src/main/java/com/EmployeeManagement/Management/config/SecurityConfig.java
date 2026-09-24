@@ -19,14 +19,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 
 
 @Configuration
@@ -42,34 +37,69 @@ public class SecurityConfig {
             this.customUserDetailsServices = userDetailsServices;
     }
 
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(
+//            HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .sessionManagement(session ->
+//                        session.sessionCreationPolicy(
+//                                SessionCreationPolicy.STATELESS
+//                        )
+//                )
+//                .authorizeHttpRequests(auth -> auth
+//                        // Public endpoints
+//                        .requestMatchers(
+//                                "/api/auth/register",
+//                                "/api/auth/login",
+//                                "/",
+//                                "/swagger-ui/**",
+//                                "/swagger-ui.html",
+//                                "/v3/api-docs/**"
+//                        ).permitAll()
+//
+//                        // ADMIN only
+//                        .requestMatchers("/api/admin/**")
+//                        .hasRole("ADMIN")
+//
+//                        // ADMIN + USER
+//                        .requestMatchers("/api/employees/**")
+//                        .hasAnyRole("ADMIN", "USER")
+//
+//                        // Everything else requires login
+//                        .anyRequest()
+//                        .authenticated()
+//                )
+//
+//                .userDetailsService(customUserDetailsServices)
+//                .oauth2ResourceServer(oauth2 ->
+//                        oauth2.jwt(jwt ->
+//                                jwt.jwtAuthenticationConverter(
+//                                        jwtAuthenticationConverter()
+//                                )
+//                        )
+//                );
+//
+//        return http.build();
+//    }
+@Bean
+public SecurityFilterChain securityFilterChain(
+        HttpSecurity http) throws Exception {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
-        http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                );
+    http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session ->
+                    session.sessionCreationPolicy(
+                            SessionCreationPolicy.STATELESS
+                    )
+            )
+            .authorizeHttpRequests(auth -> auth
+                    .anyRequest().permitAll()
+            );
 
-        return http.build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setExposedHeaders(List.of("Authorization"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    return http.build();
+}
 
 
     @Bean
