@@ -42,7 +42,7 @@ public class PayrollController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+//    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @PostMapping("/generate")
     public ResponseEntity<?> generatePayroll(
             @RequestParam long employeeId,
